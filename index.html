@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Голограмма</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; }
+        canvas { display: block; width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script>
+        // Инициализация
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Подсветка
+        const light = new THREE.HemisphereLight(0x00ffff, 0x000000, 1);
+        scene.add(light);
+
+        // Загрузка модели
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+            'scene.gltf', // Укажите имя вашего файла модели
+            (gltf) => {
+                const model = gltf.scene;
+                scene.add(model);
+                camera.position.z = 2;
+                
+                // Анимация
+                function animate() {
+                    requestAnimationFrame(animate);
+                    model.rotation.y += 0.01;
+                    renderer.render(scene, camera);
+                }
+                animate();
+            },
+            undefined,
+            (error) => {
+                console.error('Ошибка:', error);
+                document.body.innerHTML = `<h1 style="color: white; text-align: center;">Ошибка загрузки модели. Проверьте консоль (F12)</h1>`;
+            }
+        );
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
